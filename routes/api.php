@@ -31,6 +31,6 @@ Route::prefix('appointments')->group(function () {
     Route::get('/', [AppointmentController::class, 'index']);
     Route::post('/', [AppointmentController::class, 'store'])->middleware('auth:sanctum');
     Route::get('/{appointment}', [AppointmentController::class, 'show'])->middleware('auth:sanctum');
-    Route::put('/{appointment}', [AppointmentController::class, 'update']);
-    Route::delete('/{appointment}', [AppointmentController::class, 'destroy']);
+    Route::put('/{appointment}', [AppointmentController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/{appointment}', [AppointmentController::class, 'destroy'])->middleware('auth:sanctum');
 });

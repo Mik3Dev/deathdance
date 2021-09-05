@@ -17,9 +17,8 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('description')->nullable();
-            $table->date('appointment_date');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->timestamp('appointment_datetime');
+            $table->timestamp('end_datetime');
             $table->timestamps();
         });
     }

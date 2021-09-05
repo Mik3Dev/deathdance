@@ -27,9 +27,8 @@ class AppointmentFactory extends Factory
         return [
             'user_id'               => User::factory()->create(),
             'description'           => $this->faker->sentence(),
-            'appointment_date'      => Carbon::now(),
-            'start_time'            => Carbon::now()->toTimeString(),
-            'end_time'              => Carbon::now()->addHour()->toTimeString(),
+            'appointment_datetime'  => '01/01/2021 09:00:00',
+            'end_datetime'          => '01/01/2021 010:00:00',
         ];
     }
 }

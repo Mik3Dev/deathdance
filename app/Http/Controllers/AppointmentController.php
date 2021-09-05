@@ -31,13 +31,14 @@ class AppointmentController extends Controller
     public function store(AppointmentResquest $request)
     {
         $request->validated();
+        $datetime = Carbon::create($request->appointment_datetime);
+        $end_datetime = Carbon::create($datetime)->addHour();
 
         $appointment = Appointment::create([
             'user_id'               => $request->user()->id,
             'description'           => $request->description,
-            'appointment_date'      => Carbon::create($request->appointment_date),
-            'start_time'            => Carbon::createFromTimeString($request->start_time)->toTimeString(),
-            'end_time'              => Carbon::createFromTimeString($request->start_time)->addHour()->toTimeString(),
+            'appointment_datetime'  => $datetime->toISOString(),
+            'end_datetime'          => $end_datetime->toISOString(),
         ]);
 
         return new AppointmentResource($appointment);
@@ -51,7 +52,7 @@ class AppointmentController extends Controller
      */
     public function show(Request $request, Appointment $appointment)
     {
-        if ($request->user()->id === $appointment->id) {
+        if ($request->user()->id == $appointment->user_id) {
             return new AppointmentResource($appointment);
         }
 
@@ -67,15 +68,16 @@ class AppointmentController extends Controller
      */
     public function update(AppointmentResquest $request, Appointment $appointment)
     {
-        if ($request->user()->id !== $appointment->id) {
+        if ($request->user()->id != $appointment->user_id) {
             return response(null, Response::HTTP_FORBIDDEN);
         }
 
+        $datetime = Carbon::create($request->appointment_datetime);
+
         $request->validated();
         $appointment->description = $request->input('description', $appointment->description);
-        $appointment->appointment_date = Carbon::create($request->appointment_date);
-        $appointment->start_time = Carbon::createFromTimeString($request->start_time)->toTimeString();
-        $appointment->end_time = Carbon::createFromTimeString($request->start_time)->addHour()->toTimeString();
+        $appointment->appointment_datetime = $datetime->toISOString();
+        $appointment->end_datetime = $datetime->addHour()->toISOString();
         $appointment->save();
 
         return new AppointmentResource($appointment);
@@ -89,7 +91,7 @@ class AppointmentController extends Controller
      */
     public function destroy(Request $request, Appointment $appointment)
     {
-        if ($request->user()->id !== $appointment->id) {
+        if ($request->user()->id != $appointment->user_id) {
             return response(null, Response::HTTP_FORBIDDEN);
         }
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AvailableHour;
+use App\Rules\OfficeHours;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AppointmentResquest extends FormRequest
@@ -24,9 +26,14 @@ class AppointmentResquest extends FormRequest
     public function rules()
     {
         return [
-            'description'       => 'nullable|max:255',
-            'appointment_date'  => 'required|date|after_or_equal:today',
-            'start_time'        => 'required',
+            'description'           => 'nullable|max:255',
+            'appointment_datetime'  => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                new OfficeHours,
+                new AvailableHour
+            ],
         ];
     }
 }

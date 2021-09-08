@@ -26,7 +26,7 @@ class AppointmentResquest extends FormRequest
     public function rules()
     {
         return [
-            'description'           => 'nullable|max:255',
+            'description'           => 'nullable|max:150',
             'appointment_datetime'  => [
                 'required',
                 'date',

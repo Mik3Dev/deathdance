@@ -37,8 +37,8 @@ class AppointmentController extends Controller
         $appointment = Appointment::create([
             'user_id'               => $request->user()->id,
             'description'           => $request->description,
-            'appointment_datetime'  => $datetime->toISOString(),
-            'end_datetime'          => $end_datetime->toISOString(),
+            'appointment_datetime'  => $datetime,
+            'end_datetime'          => $end_datetime,
         ]);
 
         return new AppointmentResource($appointment);
@@ -52,11 +52,7 @@ class AppointmentController extends Controller
      */
     public function show(Request $request, Appointment $appointment)
     {
-        if ($request->user()->id == $appointment->user_id) {
-            return new AppointmentResource($appointment);
-        }
-
-        return response(null, Response::HTTP_FORBIDDEN);
+        return new AppointmentResource($appointment);
     }
 
     /**
@@ -76,8 +72,8 @@ class AppointmentController extends Controller
 
         $request->validated();
         $appointment->description = $request->input('description', $appointment->description);
-        $appointment->appointment_datetime = $datetime->toISOString();
-        $appointment->end_datetime = $datetime->addHour()->toISOString();
+        $appointment->appointment_datetime = $datetime;
+        $appointment->end_datetime = $datetime->addHour();
         $appointment->save();
 
         return new AppointmentResource($appointment);

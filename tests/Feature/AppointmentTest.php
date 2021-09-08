@@ -85,7 +85,7 @@ class AppointmentTest extends TestCase
 
         $appointment = Appointment::factory()->raw([
             'description'           => 'lorem ipsum',
-            'appointment_datetime'  => $appointment_date->toDateTimeLocalString(),
+            'appointment_datetime'  => $appointment_date->toDateTimeString(),
         ]);
 
         $this->json('post', '/api/appointments', $appointment)
@@ -95,8 +95,8 @@ class AppointmentTest extends TestCase
         $this->assertDatabaseHas('appointments', [
             'user_id'               => $user->id,
             'description'           => 'lorem ipsum',
-            'appointment_datetime'  => $appointment_date->toISOString(),
-            'end_datetime'          => $appointment_date->addHour()->toISOString(),
+            'appointment_datetime'  => $appointment_date->toDateTimeString(),
+            'end_datetime'          => $appointment_date->addHour()->toDateTimeString(),
         ]);
     }
 
@@ -166,7 +166,7 @@ class AppointmentTest extends TestCase
 
         $appointment = Appointment::factory()->create([
             'user_id'               => $user->id,
-            'appointment_datetime'  => $appointment_date->toDateTimeLocalString()
+            'appointment_datetime'  => $appointment_date->toDateTimeString()
         ]);
 
         $this->json('put', '/api/appointments/' . $appointment->id, [
@@ -194,7 +194,6 @@ class AppointmentTest extends TestCase
             'id'                    => $appointment->id,
             'user_id'               => $user->id,
             'description'           => 'new description',
-            'appointment_datetime'  => $appointment_date->toISOString(),
         ]);
     }
 
